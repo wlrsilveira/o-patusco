@@ -3,20 +3,10 @@
 namespace App\Services\Receptionist;
 
 use App\Models\User;
-use Illuminate\Support\Facades\Hash;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ReceptionistService
 {
-    public function __construct()
-    {
-    }
-
-    public function updatePassword(User $user, array $data = []): void
-    {
-        $user->password = Hash::make($data['password']);
-        $user->save();
-    }
-
     public function create(array $data): User
     {
         $user = User::create($data);
@@ -33,5 +23,20 @@ class ReceptionistService
     public function delete(User $user): void
     {
         $user->delete();
+    }
+
+    public function list(array $array): LengthAwarePaginator
+    {
+        $perPage = $array['perPage'] ?? 15;
+        $sortBy = $array['sortBy'][0]['key'] ?? 'id';
+        $sortOrder = $array['sortBy'][0]['order'] ?? 'asc';
+
+        return User::role('recepcionist')
+            ->when(isset($array['search']), function ($query) use ($array) {
+                $query->where('name', 'like', '%' . $array['search'] . '%')
+                    ->orWhere('email', 'like', '%' . $array['search'] . '%');
+            })
+            ->orderBy($sortBy, $sortOrder)
+            ->paginate($perPage);
     }
 }

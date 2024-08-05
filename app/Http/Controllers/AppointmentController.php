@@ -70,12 +70,20 @@ class AppointmentController extends Controller
         AppointmentService $appointmentService
     ): JsonResponse {
         try {
-            return response()->json(
-                AppointmentsResourceCollection::collection(
-                    $appointmentService->search(
-                        $request->all()
-                    )
+            $items = $appointmentService->search($request->validated());
+            $returnData = [
+                'data' => AppointmentsResourceCollection::collection(
+                    $items->items()
                 ),
+                'meta' => [
+                    'current_page' => $items->currentPage(),
+                    'per_page' => $items->perPage(),
+                    'total' => $items->total(),
+                ]
+            ];
+
+            return response()->json(
+                $returnData,
                 200
             );
         } catch (\Exception $e) {
@@ -175,6 +183,20 @@ class AppointmentController extends Controller
         AppointmentService $appointmentService
     ): JsonResponse {
         try {
+            $user = auth()->user();
+
+            if ($appointment->doctor_id) {
+                if ($appointment->doctor_id !== $user->id) {
+                    return response()->json(
+                        [
+                            'message' => 'Você não tem permissão para editar esta Consulta.',
+                            'code' => 403
+                        ],
+                        403
+                    );
+                }
+            }
+
             return response()->json(
                 AppointmentsResourceCollection::make(
                     $appointmentService->update(
@@ -325,72 +347,7 @@ class AppointmentController extends Controller
         }
     }
 
-    /**
-     * List Appointments by user.
-     * * @authenticated
-     * @header Content-Type application/json
-     * @header Accept application/json
-     * @header Authorization Bearer {token}
-     * @response 200 [
-     *  {
-     *         "id": 1,
-     *         "client_name": "John Doe",
-     *         "client_email": "email@test.com",
-     *         "animal_name": "animal 1",
-     *         "animal_type": "cachorro"
-     *         "animal_age": 2,
-     *         "symptoms": "sintomas",
-     *         "date": "2021-10-10",
-     *         "period": "manhã",
-     *         "doctor": {
-     *              "id": 1,
-     *              "name": "John Doe",
-     *              "email": "test@test.com",
-     *          }
-     *  },
-     *{
-     *         "id": 2,
-     *         "client_name": "John Doe",
-     *         "client_email": "email@test.com",
-     *         "animal_name": "animal 1",
-     *         "animal_type": "cachorro"
-     *         "animal_age": 2,
-     *         "symptoms": "sintomas",
-     *         "date": "2021-10-10",
-     *         "period": "manhã",
-     *         "doctor": {
-     *              "id": 1,
-     *              "name": "John Doe",
-     *              "email": "test@test.com",
-     *          }
-     *  },
-     * ]
-     * @response 403 {
-     *   "message": "Unauthorized"
-     * }
-     *
-     * @param  \App\Models\Appointment  $appointment
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function listByUser()
-    {
-        try {
-            $user = auth()->user();
-            return response()->json(
-                AppointmentsResourceCollection::collection(
-                    $user->appointments
-                ),
-                200
-            );
-        } catch (\Exception $e) {
-            return (new ExceptionResource([
-                'message' => $e->getMessage(),
-                'code' => 400
-            ]))
-            ->response()
-            ->setStatusCode(400);
-        }
-    }
+
 
     /**
      * Update appointment by doctor

@@ -41,33 +41,38 @@ The `docker-compose.yml` file sets up the following services:
 ## Getting Started
 
 1. **Clone the Repository**
-   `
+   ```
    git clone <repository-url>
    cd <repository-directory>
-   `
+   ```
+
+2. **Copy and Configure .env**
+
+ - Copy .env.example and past on root folder
+ - Rename to .env
 
 3. **Build and Start the Containers**
 
 `docker-compose up --build`
 
-3. **Access the PHP-FPM Container**
+4. **Access the PHP-FPM Container**
 
-`docker-compose exec o-patusco_php-fpm_1 /bin/sh`
+`docker-compose exec php-fpm /bin/sh`
 
-4. **Install Dependencies and Set Up the Application**
+5. **Install Dependencies and Set Up the Application**
 
-`composer install
+```composer install
 php artisan key:generate
 php artisan jwt:secret
-php artisan migrate --seed`
-
-5. **Create the Admin User**
-    - Replace <nome_user>, <email_user>, and <password> with your desired user details:
-    `php artisan admin:create <nome_user> <email_user> <password>`
+php artisan migrate --seed```
 
 6. **Access the Application**
 
-    - http://localhost:8003/api/v1
+    - http://localhost:8000/api/v1
 
 7. **Create API Documentation**
     `php artisan scribe:generate`   
+
+8. **Admin USER**
+    ```email: admin@admin.com 
+    password: 123456```

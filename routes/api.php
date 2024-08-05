@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnimalTypeController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AttendantController;
 use App\Http\Controllers\DoctorController;
@@ -26,7 +27,7 @@ Route::get('/ping', function () {
 Route::group([
 
     'middleware' => 'api',
-    'prefix' => 'auth'
+    'prefix' => 'v1/auth'
 
 ], function ($router) {
 
@@ -58,13 +59,15 @@ Route::group([
     'prefix' => 'v1'
 ], function ($router) {
 
+    Route::get('animalTypes', [AnimalTypeController::class, 'index']);
+
     Route::post('appointment',
     [AppointmentController::class, 'store'])
     ->middleware('can:schedule_appointments');
 
     Route::get('appointment',
     [AppointmentController::class, 'list'])
-    ->middleware('can:show_appointments');
+    ->middleware(['can:show_appointments']);
 
     Route::group([
         'middleware' => 'api',
@@ -92,12 +95,9 @@ Route::group([
         'middleware' => 'api',
         'prefix' => 'my'
     ], function ($router) {
-        Route::get('/appointments', [AppointmentController::class, 'listByUser'])
-            ->middleware('can:view_my_appointments');
-
-        Route::put('/appointments/{appointment:id}',
-            [AppointmentController::class, 'updateByUser']
-            )->middleware('can:update_my_appointments');
+        Route::get('appointments',
+        [AppointmentController::class, 'list'])
+            ->middleware(['can:view_my_appointments']);
     });
 });
 

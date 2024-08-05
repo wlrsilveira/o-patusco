@@ -15,7 +15,7 @@ services:
             - MYSQL_ROOT_PASSWORD=030215
             - MYSQL_DATABASE=patusco
             - MYSQL_USER=patusco
-            - MYSQL_PASSWORD=casa030215
+            - MYSQL_PASSWORD=030215
         ports:
             - '8003:3306'
 

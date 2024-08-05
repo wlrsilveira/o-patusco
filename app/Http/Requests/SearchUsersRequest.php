@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreUserRequest extends FormRequest
+class SearchUsersRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,18 +24,17 @@ class StoreUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'   => ['string', 'required', 'max:255'],
-            'email'    => ['email:rfc,dns', 'required', Rule::unique('users', 'email')->whereNull('deleted_at')],
-            'password' => ['string', 'required', 'min:8', 'confirmed'],
+            'search'   => ['string', 'nullable', 'max:255'],
+            'perPage' => ['integer', 'nullable'],
+            'page' => ['integer', 'nullable'],
+
         ];
     }
 
     public function attributes()
     {
         return [
-            'name' => 'nome',
-            'email' => 'e-mail',
-            'password' => 'senha',
+            'search' => 'busca',
         ];
     }
 }

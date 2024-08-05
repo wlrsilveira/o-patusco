@@ -25,6 +25,7 @@ class AppointmentsResourceCollection extends JsonResource
             'date' => $this->date,
             'period' => $this->period,
             'doctor' => new DoctorResource($this->doctor),
+            'animal_type_object' => new AnimalTypeResourceCollection($this->animalType),
         ];
     }
 }

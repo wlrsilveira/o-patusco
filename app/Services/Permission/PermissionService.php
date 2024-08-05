@@ -23,7 +23,13 @@ class PermissionService
                 'guard_name' => 'api',
                 'created_at' =>  Carbon::now(),
                 'updated_at' =>  Carbon::now(),
-            ]
+            ],
+            [
+                'name'       => 'show_appointments',
+                'guard_name' => 'api',
+                'created_at' =>  Carbon::now(),
+                'updated_at' =>  Carbon::now(),
+            ],
         ];
 
         $createdPermissions = [];
@@ -50,7 +56,7 @@ class PermissionService
                 'updated_at' =>  Carbon::now(),
             ],
             [
-                'name'       => 'update_my_appointments',
+                'name'       => 'update_appointments',
                 'guard_name' => 'api',
                 'created_at' =>  Carbon::now(),
                 'updated_at' =>  Carbon::now(),
@@ -141,6 +147,37 @@ class PermissionService
                 'created_at' =>  Carbon::now(),
                 'updated_at' =>  Carbon::now(),
             ],
+            [
+                'name'       => 'schedule_appointments',
+                'guard_name' => 'api',
+                'created_at' =>  Carbon::now(),
+                'updated_at' =>  Carbon::now(),
+            ],
+            [
+                'name'       => 'show_appointments',
+                'guard_name' => 'api',
+                'created_at' =>  Carbon::now(),
+                'updated_at' =>  Carbon::now(),
+            ],
+            [
+                'name'       => 'update_appointments',
+                'guard_name' => 'api',
+                'created_at' =>  Carbon::now(),
+                'updated_at' =>  Carbon::now(),
+            ],
+            [
+                'name'       => 'delete_appointments',
+                'guard_name' => 'api',
+                'created_at' =>  Carbon::now(),
+                'updated_at' =>  Carbon::now(),
+            ],
+            [
+                'name'       => 'attach_appointments',
+                'guard_name' => 'api',
+                'created_at' =>  Carbon::now(),
+                'updated_at' =>  Carbon::now(),
+            ],
+
         ];
 
         $createdPermissions = [];

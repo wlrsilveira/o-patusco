@@ -24,18 +24,24 @@ class SearchAppointmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'start_date'   => ['string', 'nullable', 'max:255'],
-            'end_date'    => ['email:rfc,dns', 'nullable'],
+            'name'   => ['string', 'nullable', 'max:255'],
+            'email'    => ['email:rfc,dns', 'nullable'],
+            'animal_name' => ['string', 'nullable'],
+            'date' => ['date', 'nullable'],
             'animal_type_id' => ['integer', 'nullable','exists:animal_types,id'],
+            'doctor_id' => ['integer', 'nullable','exists:users,id'],
         ];
     }
 
     public function attributes()
     {
         return [
-            'start_date' => 'data inicial',
-            'end_date' => 'data final',
+            'name' => 'nome',
+            'email' => 'e-mail',
+            'animal_name' => 'nome do animal',
+            'date' => 'data',
             'animal_type_id' => 'tipo de animal',
+            'doctor_id' => 'médico',
         ];
     }
 }
